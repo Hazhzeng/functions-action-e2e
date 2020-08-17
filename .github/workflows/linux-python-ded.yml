@@ -1,4 +1,4 @@
-name: WINDOWS_NODE_PRE
+name: LINUX_PYTHON_DED
 
 on:
   [push]
@@ -11,38 +11,38 @@ on:
 #
 # 2. Change these variables for your configuration:
 env:
-  AZURE_FUNCTIONAPP_NAME: hazeng-fa-github-win-pre-node
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: './tests/node'
-  NODE_VERSION: '10.x'
+  AZURE_FUNCTIONAPP_NAME: hazeng-fa-github-lin-ded-python
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './tests/python'
+  PYTHON_VERSION: '3.6'
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@master
-    - name: 'Login via Azure CLI'
-      uses: azure/login@v1
+
+    - name: Setup Python ${{ env.PYTHON_VERSION }} Environment
+      uses: actions/setup-python@v1
       with:
-        creds: ${{ secrets.WINDOWS_NODE_PRE_RBAC }}
-    - name: Setup Node 10.x
-      uses: actions/setup-node@v1
-      with:
-        node-version: '10.x'
-    - name: 'Resolve Project Dependencies Using Npm'
-      shell: pwsh
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: 'Resolve Project Dependencies Using Pip'
+      shell: bash
       run: |
         pushd '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-        npm install
-        npm run build --if-present
-        npm run test --if-present
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt --target=".python_packages/lib/site-packages"
         popd
+
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@stage
       id: fa
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        publish-profile: ${{ secrets.LINUX_PYTHON_DED }}
+
     - name: 'Report HttpTrigger Result'
       shell: pwsh
       run: |
@@ -57,3 +57,4 @@ jobs:
           $i = $i + 1
         }
         exit 1
+# For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
