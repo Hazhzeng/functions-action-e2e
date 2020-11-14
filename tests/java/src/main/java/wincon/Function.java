@@ -9,6 +9,6 @@ public class Function {
     public HttpResponseMessage run(
             @HttpTrigger(name = "req", methods = {HttpMethod.GET, HttpMethod.POST}, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
-        return request.createResponseBuilder(HttpStatus.OK).body("KKKKK").build();
+        return request.createResponseBuilder(HttpStatus.OK).body("JJJJJ").build();
     }
 }
