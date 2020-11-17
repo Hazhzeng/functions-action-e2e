@@ -1,19 +1,12 @@
-name: LINUX_DOTNET
+name: LINUX_DOTNET_RBAC
 
 on:
   [push]
 
-# CONFIGURATION
-# For help, go to https://github.com/Azure/Actions
-#
-# 1. Set up the following secrets in your repository:
-#   AZURE_FUNCTIONAPP_PUBLISH_PROFILE
-#
-# 2. Change these variables for your configuration:
 env:
-  AZURE_FUNCTIONAPP_NAME: hazeng-fa-github-lin-con-dotnet
+  AZURE_FUNCTIONAPP_NAME: hazeng-fa-github-lin-con-dotnet-rbac
   AZURE_FUNCTIONAPP_PACKAGE_PATH: './tests/dotnet'
-  DOTNET_VERSION: '2.2.402'
+  DOTNET_VERSION: '3.1.403'
 
 jobs:
   build-and-deploy:
@@ -22,26 +15,28 @@ jobs:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@master
 
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.LINUX_DOTNET_RBAC }}
+
     - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: 'Resolve Project Dependencies Using Dotnet'
-      shell: bash
+    - name: 'Run dotnet'
+      shell: pwsh
       run: |
-        pushd '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
         dotnet build --configuration Release --output ./output
         popd
-
     - name: 'Run Azure Functions Action'
-      uses: Azure/functions-action@v1.1.6
+      uses: Azure/functions-action@v1
       id: fa
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
         package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-        publish-profile: ${{ secrets.LINUX_DOTNET }}
-
     - name: 'Report HttpTrigger Result'
       shell: pwsh
       run: |
@@ -56,5 +51,3 @@ jobs:
           $i = $i + 1
         }
         exit 1
-
-# For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples

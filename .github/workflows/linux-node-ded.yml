@@ -1,4 +1,4 @@
-name: LINUX_NODE_DED
+name: LINUX_NODE_DED_RBAC
 
 on:
   [push]
@@ -50,7 +50,7 @@ jobs:
         while ($i -lt 10) {
           sleep 10
           $RESPONSE = $(curl "${{ steps.fa.outputs.app-url }}/api/HttpTrigger")
-          $RESULT = ($RESPONSE -eq "JKSLD")
+          $RESULT = ($RESPONSE -eq "KKKKK")
           if ($RESULT) {
             exit 0
           }
