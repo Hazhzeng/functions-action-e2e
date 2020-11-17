@@ -17,7 +17,7 @@ namespace dotnet
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            return (ActionResult)new OkObjectResult("YUISD");
+            return (ActionResult)new OkObjectResult("KDLSU");
         }
     }
 }
