@@ -1,0 +1,64 @@
+name: LINUX_JAVA
+
+on:
+  [push]
+
+# CONFIGURATION
+# For help, go to https://github.com/Azure/Actions
+#
+# 1. Set up the following secrets in your repository:
+#   AZURE_FUNCTIONAPP_PUBLISH_PROFILE
+#
+# 2. Change these variables for your configuration:
+env:
+  AZURE_FUNCTIONAPP_NAME: hazeng-fa-github-lin-con-java-pom-xml
+  POM_XML_DIRECTORY: './tests/java'
+  POM_FUNCTIONAPP_NAME: functionAppName
+  JAVA_VERSION: '1.8.x'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@master
+
+    - name: Setup Java Sdk ${{ env.JAVA_VERSION }}
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ env.JAVA_VERSION }}
+
+    - name: 'Restore Project Dependencies Using Mvn'
+      shell: bash
+      run: |
+        # If your function app project is not located in your repository's root
+        # Please change your directory for maven build in pushd
+        pushd '${{ env.POM_XML_DIRECTORY }}'
+        mvn clean package
+        mvn azure-functions:package
+        popd
+
+    - name: 'Run Azure Functions Action'
+      uses: Hazhzeng/functions-action@master
+      id: fa
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: './${{ env.POM_XML_DIRECTORY }}'
+        publish-profile: ${{ secrets.LINUX_JAVA_POM_XML }}
+        respect-pom-xml: true
+
+    - name: 'Report HttpTrigger Result'
+      shell: pwsh
+      run: |
+        $i = 0
+        while ($i -lt 10) {
+          sleep 10
+          $RESPONSE = $(curl "${{ steps.fa.outputs.app-url }}/api/HttpTrigger")
+          $RESULT = ($RESPONSE -eq "JSKDLA")
+          if ($RESULT) {
+            exit 0
+          }
+          $i = $i + 1
+        }
+        exit 1
+# For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
