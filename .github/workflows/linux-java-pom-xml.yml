@@ -1,4 +1,4 @@
-name: LINUX_JAVA
+name: LINUX_JAVA_POM_XML
 
 on:
   [push]
