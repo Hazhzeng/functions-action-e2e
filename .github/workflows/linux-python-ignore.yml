@@ -1,4 +1,4 @@
-name: LINUX_PYTHON_DED
+name: LINUX_PYTHON
 
 on:
   [push]
@@ -11,9 +11,9 @@ on:
 #
 # 2. Change these variables for your configuration:
 env:
-  AZURE_FUNCTIONAPP_NAME: hazeng-fa-github-lin-ded-python
+  AZURE_FUNCTIONAPP_NAME: hazeng-fa-github-lin-con-python-funcignore
   AZURE_FUNCTIONAPP_PACKAGE_PATH: './tests/python'
-  PYTHON_VERSION: '3.6'
+  PYTHON_VERSION: '3.8'
 
 jobs:
   build-and-deploy:
@@ -41,7 +41,8 @@ jobs:
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-        publish-profile: ${{ secrets.LINUX_PYTHON_DED }}
+        publish-profile: ${{ secrets.LINUX_PYTHON_IGNORE }}
+        respect-funcignore: true
 
     - name: 'Report HttpTrigger Result'
       shell: pwsh
