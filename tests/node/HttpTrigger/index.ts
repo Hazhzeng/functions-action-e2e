@@ -2,7 +2,7 @@ import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     context.log('HTTP trigger function processed a request.');
-    context.res = { body: "UYIDFOIURTPUIPOASEIRUTPTA78FD9142JIOY7SFA" };
+    context.res = { body: "ZXCQEYTRUJHASGDF" };
 };
 
 export default httpTrigger;
