@@ -17,7 +17,9 @@ namespace dotnet
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            return (ActionResult)new OkObjectResult("BURENSHI");
+            string pwd = Environment.GetEnvironmentVariable("AzureWebJobsScriptRoot");
+            string text = await System.IO.File.ReadAllTextAsync($"{pwd}/sha.txt");
+            return new OkObjectResult(text);
         }
     }
 }

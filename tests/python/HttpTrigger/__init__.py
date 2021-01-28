@@ -5,7 +5,6 @@ import pyodbc
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    return func.HttpResponse(
-        "BURENSHI",
-        status_code=200
-    )
+    with open('sha.txt', 'r') as file:
+        line = file.readline()
+    return func.HttpResponse(line)

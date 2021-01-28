@@ -21,6 +21,13 @@ jobs:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@master
 
+    - name: 'Generate sha.txt'
+      shell: bash
+      run: |
+        pushd '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        echo "$GITHUB_SHA" > sha.txt
+        popd
+
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@dev
       id: fa

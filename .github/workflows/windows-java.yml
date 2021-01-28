@@ -36,6 +36,7 @@ jobs:
         pushd '${{ env.POM_XML_DIRECTORY }}'
         mvn clean package
         mvn azure-functions:package
+        echo "$env:GITHUB_SHA" > sha.txt
         popd
 
     - name: 'Run Azure Functions Action'

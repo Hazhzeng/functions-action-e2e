@@ -34,6 +34,7 @@ jobs:
         # If your function app project is not located in your repository's root
         # Please change your directory for maven build in pushd
         pushd '${{ env.POM_XML_DIRECTORY }}'
+        echo "$GITHUB_SHA" > sha.txt
         mvn clean package
         mvn azure-functions:package
         popd
