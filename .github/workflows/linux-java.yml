@@ -53,7 +53,7 @@ jobs:
         while ($i -lt 10) {
           sleep 10
           $RESPONSE = $(curl "${{ steps.fa.outputs.app-url }}/api/HttpTrigger")
-          $RESULT = ($RESPONSE -eq "GOODGOODSTUDY")
+          $RESULT = ($RESPONSE -eq "DAYDAYUP")
           if ($RESULT) {
             exit 0
           }

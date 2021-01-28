@@ -41,8 +41,9 @@ jobs:
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-        publish-profile: ${{ secrets.LINUX_PYTHON_DED_ENABLE_RB }}
+        publish-profile: ${{ secrets.LINUX_PYTHON_DED_DISABLE_RB }}
         respect-funcignore: true
+        remote-build: 'disable'
 
     - name: 'Report HttpTrigger Result'
       shell: pwsh
@@ -51,7 +52,7 @@ jobs:
         while ($i -lt 10) {
           sleep 10
           $RESPONSE = $(curl "${{ steps.fa.outputs.app-url }}/api/HttpTrigger")
-          $RESULT = ($RESPONSE -eq "GOODGOODSTUDY")
+          $RESULT = ($RESPONSE -eq "DAYDAYUP")
           if ($RESULT) {
             exit 0
           }
