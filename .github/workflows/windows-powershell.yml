@@ -36,7 +36,7 @@ jobs:
         while ($i -lt 10) {
           sleep 10
           $RESPONSE = $(curl "${{ steps.fa.outputs.app-url }}/api/HttpTrigger")
-          $RESULT = ($RESPONSE -eq "MYSTRY")
+          $RESULT = ($RESPONSE -eq "MYSTRY2")
           if ($RESULT) {
             exit 0
           }
