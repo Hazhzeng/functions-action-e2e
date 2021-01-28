@@ -1,0 +1,61 @@
+name: LINUX_PYTHON_DED_DISABLE_RB
+
+on:
+  [push]
+
+# CONFIGURATION
+# For help, go to https://github.com/Azure/Actions
+#
+# 1. Set up the following secrets in your repository:
+#   AZURE_FUNCTIONAPP_PUBLISH_PROFILE
+#
+# 2. Change these variables for your configuration:
+env:
+  AZURE_FUNCTIONAPP_NAME: hazeng-fa-github-lin-con-python-disable-rb
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './tests/python'
+  PYTHON_VERSION: '3.6'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@master
+
+    - name: Setup Python ${{ env.PYTHON_VERSION }} Environment
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: 'Resolve Project Dependencies Using Pip'
+      shell: bash
+      run: |
+        pushd '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+        popd
+
+    - name: 'Run Azure Functions Action'
+      uses: Azure/functions-action@v1.2.1
+      id: fa
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        publish-profile: ${{ secrets.LINUX_PYTHON_DED_ENABLE_RB }}
+        respect-funcignore: true
+
+    - name: 'Report HttpTrigger Result'
+      shell: pwsh
+      run: |
+        $i = 0
+        while ($i -lt 10) {
+          sleep 10
+          $RESPONSE = $(curl "${{ steps.fa.outputs.app-url }}/api/HttpTrigger")
+          $RESULT = ($RESPONSE -eq "GOODGOODSTUDY")
+          if ($RESULT) {
+            exit 0
+          }
+          $i = $i + 1
+        }
+        exit 1
+# For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
