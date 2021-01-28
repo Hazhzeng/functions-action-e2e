@@ -44,7 +44,8 @@ jobs:
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
         publish-profile: ${{ secrets.LINUX_PYTHON_DED_DISABLE_RB }}
         respect-funcignore: true
-        remote-build: 'disable'
+        scm-do-build-during-deployment: false
+        enable-oryx-build: false
 
     - name: 'Report HttpTrigger Result'
       shell: pwsh
