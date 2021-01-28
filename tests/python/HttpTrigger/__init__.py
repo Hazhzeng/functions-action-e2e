@@ -6,6 +6,6 @@ import pyodbc
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     return func.HttpResponse(
-        "WHATWHATWHAT",
+        "GOGOGO",
         status_code=200
     )
