@@ -17,7 +17,7 @@ env:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@master
@@ -44,7 +44,7 @@ jobs:
         while ($i -lt 10) {
           sleep 10
           $RESPONSE = $(curl "${{ steps.fa.outputs.app-url }}/api/HttpTrigger")
-          $RESULT = ($RESPONSE -eq "3333")
+          $RESULT = ($RESPONSE -eq "4444")
           if ($RESULT) {
             exit 0
           }
