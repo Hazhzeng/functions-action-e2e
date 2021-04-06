@@ -37,7 +37,7 @@ jobs:
         popd
 
     - name: 'Run Azure Functions Action'
-      uses: Azure/functions-action@releases/v1
+      uses: Azure/functions-action@v1.3.2
       id: fa
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
@@ -51,7 +51,7 @@ jobs:
         while ($i -lt 10) {
           sleep 10
           $RESPONSE = $(curl "${{ steps.fa.outputs.app-url }}/api/HttpTrigger")
-          $RESULT = ($RESPONSE -eq "4444")
+          $RESULT = ($RESPONSE -eq "5555")
           if ($RESULT) {
             exit 0
           }
