@@ -28,7 +28,7 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
 
     - name: 'Run Azure Functions Action'
-      uses: Azure/functions-action@v1
+      uses: Azure/functions-action@releases/v1
       id: fa
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
@@ -44,7 +44,7 @@ jobs:
         while ($i -lt 10) {
           sleep 10
           $RESPONSE = $(curl "${{ steps.fa.outputs.app-url }}/api/HttpTrigger")
-          $RESULT = ($RESPONSE -eq "GOBADOK050")
+          $RESULT = ($RESPONSE -eq "3333")
           if ($RESULT) {
             exit 0
           }
